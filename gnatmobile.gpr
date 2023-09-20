@@ -12,5 +12,9 @@ project Gnatmobile is
       for Connection_Tool use "pyocd";
    end Ide;
 
+   package Linker is
+      for Switches ("ada") use ("-T", "Ada_Drivers_Library/boards/MicroBit_v2/src/zfp/link.ld");
+   end Linker;
+
 end Gnatmobile;
 
