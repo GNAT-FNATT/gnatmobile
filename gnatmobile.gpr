@@ -1,4 +1,4 @@
-with "Ada_Drivers_Library\boards\MicroBit_v2\microbit_v2_zfp.gpr";
+with "Ada_Drivers_Library\boards\MicroBit_v2\microbit_v2_full.gpr";
 
 project Gnatmobile is
 
@@ -6,15 +6,15 @@ project Gnatmobile is
    for Object_Dir use "obj";
    for Main use ("main.adb");
    for Target use "arm-eabi";
-   for Runtime ("ada") use "zfp-cortex-m4f";
+   for Runtime ("ada") use "ravenscar-full-nrf52833";
 
    package Ide is
       for Connection_Tool use "pyocd";
    end Ide;
 
-   package Linker is
-      for Switches ("ada") use ("-T", "Ada_Drivers_Library/boards/MicroBit_v2/src/zfp/link.ld");
-   end Linker;
+   package Binder is
+      for Switches ("ada") use ("-D10k");
+   end Binder;
 
 end Gnatmobile;
 
