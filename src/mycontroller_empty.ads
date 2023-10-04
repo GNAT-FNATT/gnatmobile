@@ -1,6 +1,8 @@
+with MicroBit.MotorDriver;use MicroBit.MotorDriver;
+
 package MyController_empty is
 
-   type Directions is (Forward, Stop);
+   --type Directions is MicroBit.Motordriver.Directinos;
    
    task Sense with Priority => 1;
   
