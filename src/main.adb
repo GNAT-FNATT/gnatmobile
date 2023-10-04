@@ -1,6 +1,6 @@
 --with MyController; -- This embeds and instantiates the MyController package
-with MyController_empty;
-with MicroBit.MotorDriver;use MicroBit.MotorDriver;
+--with FnattController;
+
 -- NOTE ----------
 -- See the MyController_empty package first for a single file empty Sense-Think-Act (STA) template
 -- The MyController package contains a better structured STA template with each task having its own file
@@ -9,11 +9,17 @@ with MicroBit.MotorDriver;use MicroBit.MotorDriver;
 ------------------
 
 --Empty main running as a task currently set to lowest priority. Can be used as it is a normal task!
+with MicroBit.MotorDriver; use MicroBit.MotorDriver;
+
+with Sense_Task_Pkg;
+with Think_Task_Pkg;
+with Act_Task_Pkg;
 
 Procedure Main with Priority => 0 is
 
-begin
-   MicroBit.MotorDriver.Servo(1,90);
+   begin
+       MicroBit.MotorDriver.Servo(1, 90);
+
    loop -- We need a main loop, otherwise it constantly reboots!
         -- A reboot can be seen in the Serial Ports (View -> Serial Port, select com port, set baudrate to 115200 and press reset button on Microbit)
         -- Every time the Micro:Bit reboots it will begin with a "0" symbol in your Serial Port monitor.
