@@ -7,7 +7,7 @@ package body Think_Task_Pkg is
          
          delay (0.05); --simulate 50 ms execution time, replace with your 
          
-         MotorDriver.SetDirection(Forward);
+         FnattControl.SetDirectionChoice(Forward);
          
          delay until myClock + Milliseconds(100);
       end loop;

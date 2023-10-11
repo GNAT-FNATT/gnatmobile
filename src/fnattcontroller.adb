@@ -9,18 +9,39 @@ with MicroBit.Console; use MicroBit.Console;
 
 package body FnattController is
    
-    protected body MotorDriver is
+   protected body FnattControl is
       --  procedures can modify the data
-      procedure SetDirection (V : Directions) is
+      procedure SetDirectionChoice (V : Directions) is
       begin
-         DriveDirection := V;
-      end SetDirection;
+          ChoiceDirection := V;
+      end SetDirectionChoice;
+      
+      procedure SetFrontSensorDistance (D : DistanceCM) is
+      begin
+          FrontSensorDistance := D;
+      end SetFrontSensorDistance;
+      
+      procedure SetRightSensorDistance (D : DistanceCM) is
+      begin 
+          RightSensorDistance := D;
+      end SetRightSensorDistance;
 
       --  functions cannot modify the data
-      function GetDirection return Directions is
+      function GetDirectionChoice return Directions is
       begin
-         return DriveDirection;
-      end GetDirection;
-   end MotorDriver;
+         return ChoiceDirection;
+      end GetDirectionChoice;
+
+      function GetFrontSensorDistance return DistanceCM is
+      begin
+          return FrontSensorDistance;
+      end GetFrontSensorDistance;
+
+      function GetRightSensorDistance return DistanceCM is
+      begin
+         return RightSensorDistance;
+      end GetRightSensorDistance;
+      
+   end FnattControl;
    
 end FnattController;

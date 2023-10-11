@@ -1,1 +1,10 @@
+# object files
+*.o
+
+# ada library info
+*.ali
+
 obj/
+
+# unsaved files in gnat
+.#*#

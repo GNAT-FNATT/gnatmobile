@@ -1,6 +1,8 @@
 with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 
 package FnattController is
+   type DistanceCM is new Natural range 0 .. 400;
+   
    
    --ask Sense with Priority => 1;
   
@@ -9,11 +11,23 @@ package FnattController is
    
    --task Act with Priority=> 3;
 
-   protected MotorDriver is
-      function GetDirection return Directions;
-      procedure SetDirection (V : Directions);
+   protected FnattControl is
+      function GetDirectionChoice return Directions;
+      function GetFrontSensorDistance return DistanceCM;
+      function GetRightSensorDistance return DistanceCM;
+      -- function GetLeftSensorDistance return DistanceCM; 
+      
+      
+      procedure SetDirectionChoice (V : Directions);
+      procedure SetFrontSensorDistance (D : DistanceCM);
+      procedure SetRightSensorDistance (D : DistanceCM);
+      -- procedure SetLeftSensorDistance (D : DistanceCM);
+      
    private
-      DriveDirection : Directions := Stop;
-   end MotorDriver;
+      ChoiceDirection : Directions := Stop;
+      FrontSensorDistance: DistanceCM := 400;
+      RightSensorDistance: DistanceCM := 400;
+      -- LeftSensorDistance: DistanceCM := 400;
+   end FnattControl;
 
 end FnattController;
