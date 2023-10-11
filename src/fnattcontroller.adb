@@ -1,7 +1,7 @@
 with Ada.Real_Time; use Ada.Real_Time;
 with MicroBit.Console; use MicroBit.Console;
 --with MicroBit.MotorDriver; use MicroBit.MotorDriver;
-
+with MicroBit.Types; use MicroBit.Types;
 --with DFR0548;
 
 --with Think_Task_Pkg;
@@ -16,12 +16,12 @@ package body FnattController is
           ChoiceDirection := V;
       end SetDirectionChoice;
       
-      procedure SetFrontSensorDistance (D : DistanceCM) is
+      procedure SetFrontSensorDistance (D : Distance_cm) is
       begin
           FrontSensorDistance := D;
       end SetFrontSensorDistance;
       
-      procedure SetRightSensorDistance (D : DistanceCM) is
+      procedure SetRightSensorDistance (D : Distance_cm) is
       begin 
           RightSensorDistance := D;
       end SetRightSensorDistance;
@@ -32,12 +32,12 @@ package body FnattController is
          return ChoiceDirection;
       end GetDirectionChoice;
 
-      function GetFrontSensorDistance return DistanceCM is
+      function GetFrontSensorDistance return Distance_cm is
       begin
           return FrontSensorDistance;
       end GetFrontSensorDistance;
 
-      function GetRightSensorDistance return DistanceCM is
+      function GetRightSensorDistance return Distance_cm is
       begin
          return RightSensorDistance;
       end GetRightSensorDistance;

@@ -11,7 +11,7 @@ package body Act_Task_Pkg is
          -- actually drive
          MicroBit.MotorDriver.Drive(FnattControl.GetDirectionChoice);
          
-         delay until myClock + Milliseconds(40);
+         delay until myClock + Milliseconds(100);
       end loop;
    end act;
 

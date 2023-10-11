@@ -1,8 +1,11 @@
 with MicroBit.MotorDriver; use MicroBit.MotorDriver;
+with MicroBit.Types; use MicroBit.Types;
 
 package FnattController is
-   type DistanceCM is new Natural range 0 .. 400;
    
+   
+   -- subtype DistanceCM is Natural range 0 .. 400; -- distance in centimeters
+   subtype WaitTime is Natural range 0 .. 1000; -- how long we should delay
    
    --ask Sense with Priority => 1;
   
@@ -13,21 +16,21 @@ package FnattController is
 
    protected FnattControl is
       function GetDirectionChoice return Directions;
-      function GetFrontSensorDistance return DistanceCM;
-      function GetRightSensorDistance return DistanceCM;
-      -- function GetLeftSensorDistance return DistanceCM; 
+      function GetFrontSensorDistance return Distance_cm;
+      function GetRightSensorDistance return Distance_cm;
+      -- function GetLeftSensorDistance return Distance_cm; 
       
       
       procedure SetDirectionChoice (V : Directions);
-      procedure SetFrontSensorDistance (D : DistanceCM);
-      procedure SetRightSensorDistance (D : DistanceCM);
-      -- procedure SetLeftSensorDistance (D : DistanceCM);
+      procedure SetFrontSensorDistance (D : Distance_cm);
+      procedure SetRightSensorDistance (D : Distance_cm);
+      -- procedure SetLeftSensorDistance (D : Distance_cm);
       
    private
       ChoiceDirection : Directions := Stop;
-      FrontSensorDistance: DistanceCM := 400;
-      RightSensorDistance: DistanceCM := 400;
-      -- LeftSensorDistance: DistanceCM := 400;
+      FrontSensorDistance: Distance_cm := 400;
+      RightSensorDistance: Distance_cm := 400;
+      -- LeftSensorDistance: Distance_cm := 400;
    end FnattControl;
 
 end FnattController;
