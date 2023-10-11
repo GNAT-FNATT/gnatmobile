@@ -6,10 +6,10 @@ package body Act_Task_Pkg is
       loop
          myClock := Clock;
        
-         Put_Line ("Direction is: " & Directions'Image (MotorDriver.GetDirection));
+         Put_Line ("Direction is: " & Directions'Image (FnattControl.GetDirectionChoice));
          
          -- actually drive
-         MicroBit.MotorDriver.Drive(Motordriver.GetDirection);
+         MicroBit.MotorDriver.Drive(FnattControl.GetDirectionChoice);
          
          delay until myClock + Milliseconds(40);
       end loop;
