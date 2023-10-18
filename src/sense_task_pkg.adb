@@ -18,10 +18,11 @@ package body Sense_Task_Pkg is
          rightDistance := rightSensor.Read;
          leftDistance := leftSensor.Read;
          
-         Put_Line("Sensor readings ");
-         Put_Line("Forward distance " & forwardDistance'Image);
-         Put_Line("Right distance " & rightDistance'Image);
-         Put_Line("Left distance " & leftDistance'Image);
+         Put_Line("Sensor read");
+         
+         -- Put_Line("Forward distance " & forwardDistance'Image);
+         -- Put_Line("Right distance " & rightDistance'Image);
+         -- Put_Line("Left distance " & leftDistance'Image);
          
          -- Put_Line("Forward distance " & forwardDistance'Image & " right distance: " & rightDistance'Image); 
          
@@ -29,6 +30,7 @@ package body Sense_Task_Pkg is
          
          FnattControl.SetFrontSensorDistance(forwardDistance);
          FnattControl.SetRightSensorDistance(rightDistance);
+         FnattControl.SetLeftSensorDistance(leftDistance);
          
          -- FnattControl.SetDirectionChoice(Stop);
          
