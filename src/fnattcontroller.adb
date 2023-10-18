@@ -25,6 +25,11 @@ package body FnattController is
       begin 
           RightSensorDistance := D;
       end SetRightSensorDistance;
+      
+      procedure SetLeftSensorDistance (D : Distance_cm) is
+      begin 
+          LeftSensorDistance := D;
+      end SetLeftSensorDistance;
 
       --  functions cannot modify the data
       function GetDirectionChoice return Directions is
@@ -41,6 +46,11 @@ package body FnattController is
       begin
          return RightSensorDistance;
       end GetRightSensorDistance;
+      
+      function GetLeftSensorDistance return Distance_cm is
+      begin
+         return LeftSensorDistance;
+      end GetLeftSensorDistance;
       
    end FnattControl;
    

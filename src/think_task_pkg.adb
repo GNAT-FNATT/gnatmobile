@@ -39,7 +39,7 @@ package body Think_Task_Pkg is
          
          Put_Line("Descision " & decision'Image);
          
-         delay until myClock + Milliseconds(100);
+         delay until myClock + Milliseconds(60);
       end loop;
    end think;
 

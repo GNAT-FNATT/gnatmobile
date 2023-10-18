@@ -5,6 +5,7 @@ package body Sense_Task_Pkg is
       
       forwardDistance: Distance_cm;
       rightDistance: Distance_cm;
+      leftDistance: Distance_cm;
       
       -- wait: WaitTime;
    
@@ -15,8 +16,14 @@ package body Sense_Task_Pkg is
          
          forwardDistance := forwardSensor.Read;
          rightDistance := rightSensor.Read;
+         leftDistance := leftSensor.Read;
          
-         Put_Line("Forward distance " & forwardDistance'Image & " right distance: " & rightDistance'Image); 
+         Put_Line("Sensor readings ");
+         Put_Line("Forward distance " & forwardDistance'Image);
+         Put_Line("Right distance " & rightDistance'Image);
+         Put_Line("Left distance " & leftDistance'Image);
+         
+         -- Put_Line("Forward distance " & forwardDistance'Image & " right distance: " & rightDistance'Image); 
          
          -- Put_Line ("Direction is: " & Directions'Image (FnattControl.GetDirectionChoice));
          
@@ -25,7 +32,7 @@ package body Sense_Task_Pkg is
          
          -- FnattControl.SetDirectionChoice(Stop);
          
-         delay until myClock + Milliseconds(70);
+         delay until myClock + Milliseconds(30);
       end loop;
    end sense;
 

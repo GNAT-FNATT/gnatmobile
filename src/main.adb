@@ -9,7 +9,7 @@
 ------------------
 
 --Empty main running as a task currently set to lowest priority. Can be used as it is a normal task!
-with MicroBit.MotorDriver; use MicroBit.MotorDriver;
+-- with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 -- with MicroBit.Ultrasonic;
 
 with Sense_Task_Pkg;

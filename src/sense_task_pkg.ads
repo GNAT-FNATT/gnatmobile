@@ -10,8 +10,9 @@ with MicroBit.Console; use MicroBit.Console;
 
 package Sense_Task_Pkg is
 
-   package forwardSensor is new MicroBit.Ultrasonic(MicroBit.MB_P1, MicroBit.MB_P0);
-   package rightSensor is new MicroBit.Ultrasonic(MicroBit.MB_P12, MicroBit.MB_P8);
+   package forwardSensor is new MicroBit.Ultrasonic(MicroBit.MB_P0, MicroBit.MB_P1);
+   package rightSensor is new MicroBit.Ultrasonic(MicroBit.MB_P8, MicroBit.MB_P2);
+   package leftSensor is new MicroBit.Ultrasonic(MicroBit.MB_P13, MicroBit.MB_P12);
    task sense with Priority => 3;
 
 end Sense_Task_Pkg;
