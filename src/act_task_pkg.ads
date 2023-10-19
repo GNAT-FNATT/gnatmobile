@@ -7,6 +7,6 @@ with MicroBit.Console; use MicroBit.Console;
 
 package Act_Task_Pkg is
 
-   task act with Priority => 1;
+   task act with Priority => 3;
    
 end Act_Task_Pkg;

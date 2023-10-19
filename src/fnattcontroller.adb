@@ -1,10 +1,6 @@
 with Ada.Real_Time; use Ada.Real_Time;
 with MicroBit.Console; use MicroBit.Console;
---with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 with MicroBit.Types; use MicroBit.Types;
---with DFR0548;
-
---with Think_Task_Pkg;
 
 
 package body FnattController is

@@ -7,6 +7,6 @@ with MicroBit.Console; use MicroBit.Console;
 
 package Think_Task_Pkg is
 
-   task think with Priority => 2;
+   task think with Priority => 1;
 
 end Think_Task_Pkg;

@@ -1,6 +1,3 @@
---with MyController; -- This embeds and instantiates the MyController package
---with FnattController;
-
 -- NOTE ----------
 -- See the MyController_empty package first for a single file empty Sense-Think-Act (STA) template
 -- The MyController package contains a better structured STA template with each task having its own file
@@ -17,9 +14,6 @@ with Think_Task_Pkg;
 with Act_Task_Pkg;
 
 procedure Main with Priority => 0 is
-   -- package forwardSensor is new MicroBit.Ultrasonic(MicroBit.MB_P1, MicroBit.MB_P0);
-   -- package rightSensor is new MicroBit.Ultrasonic(MicroBit.MB_P12, MicroBit.MB_P8);
-
    begin
        -- MicroBit.MotorDriver.Servo(1, 90);
 
