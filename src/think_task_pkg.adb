@@ -9,7 +9,6 @@ package body Think_Task_Pkg is
       rightDistance: Distance_cm;
       leftDistance: Distance_cm;
       chosenDirection: Directions;
-      -- wait: Natural;
       
       distanceThreshold: Distance_cm := 20;
       
@@ -22,19 +21,14 @@ package body Think_Task_Pkg is
    begin
       loop
          myClock := Clock;
-         -- wait := 100;
-         
+
          isCloseFront := False;
          isCloseRight := False;
          isCloseLeft := False;
          
-         
          frontDistance := FnattControl.GetFrontSensorDistance;
          rightDistance := FnattControl.GetRightSensorDistance;
          leftDistance := FnattControl.GetLeftSensorDistance;
-         
-         -- lastDirection := FnattControl.GetDirectionChoice;
-         -- Put_Line("Making drive decision");
          
          if frontDistance /= 0 and frontDistance <= distanceThreshold then
             isCloseFront := True;
@@ -48,6 +42,14 @@ package body Think_Task_Pkg is
             isCloseLeft := True;
          end if;
          
+         -- directions which are tested and correct:
+         -- backward
+         -- forward
+         -- rotating left
+         -- forward right
+         -- forward left
+         -- backward right
+         -- backward left
          
          if isCloseFront then
             if isCloseRight and isCloseLeft then
@@ -76,13 +78,13 @@ package body Think_Task_Pkg is
                decision := 7;
             else
                -- not iscloseright and not iscloseleft
+               -- add some cooler movement here?
                chosenDirection := Forward;
                decision := 8;
             end if;
          end if;
-        
          
-         -- chosenDirection := Lateral_Left;
+         -- chosenDirection := Backward_Right;
          
          FnattControl.SetDirectionChoice(chosenDirection);
          
