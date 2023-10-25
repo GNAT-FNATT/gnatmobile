@@ -18,8 +18,7 @@ package FnattController is
       function GetDirectionChoice return Directions;
       function GetFrontSensorDistance return Distance_cm;
       function GetRightSensorDistance return Distance_cm;
-      function GetLeftSensorDistance return Distance_cm; 
-      
+      function GetLeftSensorDistance return Distance_cm;
       
       procedure SetDirectionChoice (V : Directions);
       procedure SetFrontSensorDistance (D : Distance_cm);

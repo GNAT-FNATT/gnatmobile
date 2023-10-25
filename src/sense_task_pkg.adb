@@ -7,13 +7,11 @@ package body Sense_Task_Pkg is
       rightDistance: Distance_cm;
       leftDistance: Distance_cm;
       
-      -- wait: WaitTime;
       waitTime: Integer := 200;
    
    begin
       loop
          myClock := Clock;
-         -- wait := 70;
          
          forwardDistance := forwardSensor.Read;
          rightDistance := rightSensor.Read;
