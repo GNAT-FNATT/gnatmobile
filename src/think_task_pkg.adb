@@ -9,9 +9,11 @@ package body Think_Task_Pkg is
       rightDistance: Distance_cm;
       leftDistance: Distance_cm;
       chosenDirection: Directions;
+      -- previousDirection: Directions;
       
-      distanceThreshold: Distance_cm := 20;
+      distanceThreshold: Distance_cm := 30;
       
+      shouldThink: Boolean := True;
       isCloseFront: Boolean := False;
       isCloseRight: Boolean := False;
       isCloseLeft: Boolean := False;
@@ -21,7 +23,15 @@ package body Think_Task_Pkg is
    begin
       loop
          myClock := Clock;
+         
+         shouldThink := True;
+         
+         -- is in panic mode
+         if FnattControl.GetPanicMode then
+            shouldThink := False;
+         end if;
 
+         -- previousDirection := FnattControl.GetDirectionChoice;
          isCloseFront := False;
          isCloseRight := False;
          isCloseLeft := False;
@@ -50,7 +60,8 @@ package body Think_Task_Pkg is
          -- forward left
          -- backward right
          -- backward left
-         
+
+         -- dont do all this if not shouldthink
          if isCloseFront then
             if isCloseRight and isCloseLeft then
                chosenDirection := Backward;
@@ -77,8 +88,8 @@ package body Think_Task_Pkg is
                chosenDirection := Forward_Left;
                decision := 7;
             else
-               -- not iscloseright and not iscloseleft
-               -- add some cooler movement here?
+               -- not isclosfront and not iscloseright and not iscloseleft
+               -- add some cooler movement here? need dt?
                chosenDirection := Forward;
                decision := 8;
             end if;
@@ -86,9 +97,12 @@ package body Think_Task_Pkg is
          
          -- chosenDirection := Backward_Right;
          
-         FnattControl.SetDirectionChoice(chosenDirection);
-         
-         Put_Line("Descision " & decision'Image);
+         if shouldThink then
+            FnattControl.SetDirectionChoice(chosenDirection);
+            Put_Line("Descision " & decision'Image);
+         else
+            Put_Line("In panic mode!");
+         end if;
          
          delay until myClock + Milliseconds(waitTime);
       end loop;

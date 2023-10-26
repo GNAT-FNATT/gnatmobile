@@ -6,7 +6,13 @@ with MicroBit.Types; use MicroBit.Types;
 package body FnattController is
    
    protected body FnattControl is
+      
       --  procedures can modify the data
+      procedure SetPanicMode (P : Boolean) is 
+      begin
+         HasPanic := P;
+      end;
+      
       procedure SetDirectionChoice (V : Directions) is
       begin
           ChoiceDirection := V;
@@ -28,6 +34,11 @@ package body FnattController is
       end SetLeftSensorDistance;
 
       --  functions cannot modify the data
+      function GetPanicMode return Boolean is
+      begin
+         return HasPanic;
+      end GetPanicMode;
+      
       function GetDirectionChoice return Directions is
       begin
          return ChoiceDirection;
