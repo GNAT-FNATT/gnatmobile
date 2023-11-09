@@ -1,3 +1,5 @@
+with MicroBit.Types; use MicroBit.Types;
+
 package body Act_Task_Pkg is
 
    task body act is
@@ -13,7 +15,8 @@ package body Act_Task_Pkg is
          Put_Line ("Driving direction: " & Directions'Image(driveDirection));
          
          -- actually drive
-         MicroBit.MotorDriver.Drive(driveDirection);
+         MicroBit.MotorDriver.Drive(driveDirection, FnattControl.GetSpeeds);
+         FnattControl.SetSpeeds(Speeds(4095,4095,4095,4095));
          
          delay until myClock + Milliseconds(waitTime);
       end loop;

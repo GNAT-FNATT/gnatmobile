@@ -9,6 +9,7 @@ package body Think_Task_Pkg is
       rightDistance: Distance_cm;
       leftDistance: Distance_cm;
       chosenDirection: Directions;
+      chosenSpeed: Speeds;
       -- previousDirection: Directions;
       
       distanceThreshold: Distance_cm := 30;
@@ -18,7 +19,14 @@ package body Think_Task_Pkg is
       isCloseRight: Boolean := False;
       isCloseLeft: Boolean := False;
       
+      startUpperCurve: UInt12 := 10; 
+      endUpperCurve: UInt12 := 50;
+      startLowerCurve: UInt12 := 70;
+      endLowerCurve: UInt12 := 110;
+      startMiddle: UInt12 := 120;
+      
       decision: Natural;
+      currentIteration: UInt12;
       waitTime: Integer := 300;
    begin
       loop
@@ -62,46 +70,63 @@ package body Think_Task_Pkg is
          -- backward left
 
          -- dont do all this if not shouldthink
-         if isCloseFront then
-            if isCloseRight and isCloseLeft then
-               chosenDirection := Backward;
-               decision := 1;
-            elsif not isCloseRight and isCloseLeft then
-               chosenDirection := Backward_Right;
-               decision := 2;
-            elsif isCloseRight and not isCloseLeft then
-               chosenDirection := Backward_Left;
-               decision := 3;
-            else
-               -- not iscloseright and not iscloseleft
-               chosenDirection := Rotating_Left;
-               decision := 4;
-            end if;
-         else
-            if isCloseRight and isCloseLeft then
-               chosenDirection := Forward;
-               decision := 5;
-            elsif not isCloseRight and isCloseLeft then
-               chosenDirection := Forward_Right;
-               decision := 6;
-            elsif isCloseRight and not isCloseLeft then
-               chosenDirection := Forward_Left;
-               decision := 7;
-            else
-               -- not isclosfront and not iscloseright and not iscloseleft
-               -- add some cooler movement here? need dt?
-               chosenDirection := Forward;
-               decision := 8;
-            end if;
-         end if;
-         
-         -- chosenDirection := Backward_Right;
-         
-         if shouldThink then
-            FnattControl.SetDirectionChoice(chosenDirection);
-            Put_Line("Descision " & decision'Image);
-         else
+         if not shouldThink then
             Put_Line("In panic mode!");
+         else
+            chosenSpeed := (4095, 4095, 4095, 4095);
+            
+            if isCloseFront then
+               if isCloseRight and isCloseLeft then
+                  chosenDirection := Backward;
+                  decision := 1;
+               elsif not isCloseRight and isCloseLeft then
+                  chosenDirection := Backward_Right;
+                  decision := 2;
+               elsif isCloseRight and not isCloseLeft then
+                  chosenDirection := Backward_Left;
+                  decision := 3;
+               else
+                  -- not iscloseright and not iscloseleft
+                  chosenDirection := Rotating_Left;
+                  decision := 4;
+               end if;
+            else
+               if isCloseRight and isCloseLeft then
+                  chosenDirection := Forward;
+                  decision := 5;
+               elsif not isCloseRight and isCloseLeft then
+                  chosenDirection := Forward_Right;
+                  decision := 6;
+               elsif isCloseRight and not isCloseLeft then
+                  chosenDirection := Forward_Left;
+                  decision := 7;
+               else
+                  -- not isclosfront and not iscloseright and not iscloseleft
+                  chosenDirection := Forward;
+                  currentIteration := FnattControl.GetIteration;
+                  
+                  if currentIteration >= startMiddle then
+                     currentIteration := 0;
+                  elsif startUpperCurve <= currentIteration and endUpperCurve <= currentIteration then
+                     chosenSpeed := (4095, 4095, 950, 950);
+                  elsif startLowerCurve <= currentIteration and endLowerCurve <= currentIteration then
+                     chosenSpeed := (950, 950, 4095, 4095);
+                  end if;
+                  
+                  currentIteration := currentIteration + 1;
+                  FnattControl.SetIteration(currentIteration);
+                    
+                  decision := 8;
+               end if;
+            end if;
+         
+            -- chosenDirection := Backward_Right;
+         
+
+            FnattControl.SetDirectionChoice(chosenDirection);
+            FnattControl.SetSpeeds(chosenSpeed);
+            Put_Line("Descision " & decision'Image);
+
          end if;
          
          delay until myClock + Milliseconds(waitTime);
