@@ -16,5 +16,9 @@ project Gnatmobile is
       for Switches ("ada") use ("-D10k");
    end Binder;
 
+   package Compiler is
+      for Switches ("ada") use ("-gnatX");
+   end Compiler;
+
 end Gnatmobile;
 
