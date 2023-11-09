@@ -5,7 +5,7 @@ package body Act_Task_Pkg is
    task body act is
       myClock: Time;
       driveDirection: Directions;
-      waitTime: Integer := 200;
+      waitTime: Time_Span := Milliseconds(200);
    begin
       loop
          myClock := Clock;
@@ -16,9 +16,9 @@ package body Act_Task_Pkg is
          
          -- actually drive
          MicroBit.MotorDriver.Drive(driveDirection, FnattControl.GetSpeeds);
-         FnattControl.SetSpeeds(Speeds(4095,4095,4095,4095));
+         -- FnattControl.SetSpeeds(Speeds(4095,4095,4095,4095));
          
-         delay until myClock + Milliseconds(waitTime);
+         delay until myClock + waitTime;
       end loop;
    end act;
 

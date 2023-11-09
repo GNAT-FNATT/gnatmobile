@@ -9,22 +9,23 @@ package body Sense_Task_Pkg is
       panicThreshold: Distance_cm := 10;
       panicDirection: Directions;
       
-      inPanic: Boolean;
-      isReallyClose: Boolean;
-      isReallyCloseFront: Boolean;
-      isReallyCloseRight: Boolean;
-      isReallyCloseLeft: Boolean;
+      inPanic: Boolean := False;
+      isReallyClose: Boolean := False;
+      isReallyCloseFront: Boolean := False;
+      isReallyCloseRight: Boolean := False;
+      isReallyCloseLeft: Boolean := False;
       
-      waitTime: Integer := 200;
+      waitTime: Time_Span := Milliseconds(200);
    begin
       loop
          myClock := Clock;
          
-         inPanic := False;
-         isReallyClose := False;
-         isReallyCloseFront := False;
-         isReallyCloseRight := False;
-         isReallyCloseLeft := False;
+         -- do we need to set these?
+         -- inPanic := False;
+         -- isReallyClose := False;
+         -- isReallyCloseFront := False;
+         -- isReallyCloseRight := False;
+         -- isReallyCloseLeft := False;
          
          forwardDistance := forwardSensor.Read;
          rightDistance := rightSensor.Read;
@@ -98,7 +99,7 @@ package body Sense_Task_Pkg is
          FnattControl.SetRightSensorDistance(rightDistance);
          FnattControl.SetLeftSensorDistance(leftDistance);
          
-         delay until myClock + Milliseconds(waitTime);
+         delay until myClock + waitTime;
       end loop;
    end sense;
 

@@ -26,8 +26,8 @@ package body Think_Task_Pkg is
       startMiddle: UInt12 := 120;
       
       decision: Natural;
-      currentIteration: UInt12;
-      waitTime: Integer := 300;
+      currentIteration: UInt12 := 0;
+      waitTime: Time_Span := Milliseconds(300);
    begin
       loop
          myClock := Clock;
@@ -69,12 +69,14 @@ package body Think_Task_Pkg is
          -- backward right
          -- backward left
 
+         chosenSpeed := (4095, 4095, 4095, 4095);
+         -- reset speed back to normal
+         FnattControl.SetSpeeds(chosenSpeed);
+         
          -- dont do all this if not shouldthink
          if not shouldThink then
             Put_Line("In panic mode!");
          else
-            chosenSpeed := (4095, 4095, 4095, 4095);
-            
             if isCloseFront then
                if isCloseRight and isCloseLeft then
                   chosenDirection := Backward;
@@ -101,15 +103,15 @@ package body Think_Task_Pkg is
                   chosenDirection := Forward_Left;
                   decision := 7;
                else
-                  -- not isclosfront and not iscloseright and not iscloseleft
-                  chosenDirection := Forward;
+                  -- not isclosefront and not iscloseright and not iscloseleft
                   currentIteration := FnattControl.GetIteration;
+                  chosenDirection := Forward;
                   
                   if currentIteration >= startMiddle then
                      currentIteration := 0;
-                  elsif startUpperCurve <= currentIteration and endUpperCurve <= currentIteration then
+                  elsif startUpperCurve <= currentIteration and currentIteration <= endUpperCurve then
                      chosenSpeed := (4095, 4095, 950, 950);
-                  elsif startLowerCurve <= currentIteration and endLowerCurve <= currentIteration then
+                  elsif startLowerCurve <= currentIteration and currentIteration <= endLowerCurve then
                      chosenSpeed := (950, 950, 4095, 4095);
                   end if;
                   
@@ -122,14 +124,13 @@ package body Think_Task_Pkg is
          
             -- chosenDirection := Backward_Right;
          
-
             FnattControl.SetDirectionChoice(chosenDirection);
             FnattControl.SetSpeeds(chosenSpeed);
             Put_Line("Descision " & decision'Image);
 
          end if;
          
-         delay until myClock + Milliseconds(waitTime);
+         delay until myClock + waitTime;
       end loop;
    end think;
 
