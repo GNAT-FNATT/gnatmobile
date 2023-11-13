@@ -1,7 +1,6 @@
 with MicroBit.MotorDriver; use MicroBit.MotorDriver;
-
+with fnatt.Distance; use fnatt.Distance;
 package FnattController is
-   type DistanceCM is new Natural range 0 .. 400;
    
    
    --ask Sense with Priority => 1;
@@ -10,24 +9,26 @@ package FnattController is
                                  -- what happens if think has a higher priority? Why is think' set direction overwritten by sense' set direction?
    
    --task Act with Priority=> 3;
-
+   type DistanceDirections is (Left, Front, Right);
+  
    protected FnattControl is
       function GetDirectionChoice return Directions;
-      function GetFrontSensorDistance return DistanceCM;
-      function GetRightSensorDistance return DistanceCM;
-      -- function GetLeftSensorDistance return DistanceCM; 
+      function GetFrontSensorDistance return DistanceCentimeter;
+      function GetRightSensorDistance return DistanceCentimeter;
+      --  function GetLeftSensorDistance return DistanceCentimeter;
+      function GetDistance(Direction: DistanceDirections) return DistanceCentimeter;
       
-      
+      procedure SetDistance(Direction: DistanceDirections; Distance: DistanceCentimeter);
       procedure SetDirectionChoice (V : Directions);
-      procedure SetFrontSensorDistance (D : DistanceCM);
-      procedure SetRightSensorDistance (D : DistanceCM);
-      -- procedure SetLeftSensorDistance (D : DistanceCM);
+      procedure SetFrontSensorDistance (D : DistanceCentimeter);
+      procedure SetRightSensorDistance (D : DistanceCentimeter);
+      --  procedure SetLeftSensorDistance (D : DistanceCentimeter);
       
    private
       ChoiceDirection : Directions := Stop;
-      FrontSensorDistance: DistanceCM := 400;
-      RightSensorDistance: DistanceCM := 400;
-      -- LeftSensorDistance: DistanceCM := 400;
+      FrontSensorDistance: DistanceCentimeter := 400;
+      RightSensorDistance: DistanceCentimeter := 400;
+      LeftSensorDistance: DistanceCentimeter := 400;
    end FnattControl;
 
 end FnattController;
