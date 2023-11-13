@@ -1,17 +1,15 @@
 package Fnatt.Distance is
+   type DistanceCentimeterPrecise is new Float range 0.0 .. 400.0;
+   type DistanceCentimeter is new Natural range 0 .. 400;
 
-   type DistanceCentimeter is new Float range 0.0 .. 400.0;
-   type DistanceMillimeter is new Float range 0.0 .. 4000.0;
-   type DistanceMeter is new Float range 0.0 .. 4.0;
-   --  type UnitOfMeasurement is (MillimeterUnit, CentimeterUnit);
-   --  type Value
-   --    (unit: UnitOfMeasurement) is
-   --   record
-   --     case unit is
-   --        when CentimeterUnit =>
-   --           Centimeter : Float range 0.0 .. 400.0;
-   --        when MillimeterUnit =>
-   --           Millimeter : Float range 0.0 .. 4000.0;
-      --end case;
-      --end record;
+   --  type Distance (Precise: Boolean:= False)
+   --  is record
+   --     case Precise is
+   --        when True =>
+   --           CentimeterPrecise: DistanceCentimeterPrecise;
+   --        when False =>
+   --           Centimeter: DistanceCentimeter;
+   --     end case;
+   --  end record
+   --  with Unchecked_Union;
 end Fnatt.Distance;
