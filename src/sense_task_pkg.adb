@@ -28,7 +28,7 @@ package body Sense_Task_Pkg is
       loop
          Deadline:= Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(1000);
          
-         Microbit.Console.Put_Line("P025: " & nRF.Device.P25.Set'Image);
+         --Microbit.Console.Put_Line("P025: " & nRF.Device.P25.Set'Image);
 
          leftMeasurement.Distance := leftSensor.Read;
          frontMeasurement.Distance := frontSensor.Read;

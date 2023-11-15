@@ -17,7 +17,7 @@ package Sense_Task_Pkg is
    package frontSensor is new fnatt.Ultrasonic_sensor(MicroBit.MB_P0, MicroBit.MB_P1);
    package rightSensor is new fnatt.Ultrasonic_sensor(MicroBit.MB_P8, MicroBit.MB_P2);
    package leftSensor is new fnatt.Ultrasonic_sensor(MicroBit.MB_P13, MicroBit.MB_P12);
-   --  package detection is new fnatt.crash_detection(fnatt.crash.X);
+   package detection is new fnatt.crash_detection;
    MaximumDistance: constant fnatt.Distance.DistanceCentimeter:=50;
    ThresholdValue: constant fnatt.Distance.DistanceCentimeter:= 5;
   -- type A is array(Natural range <>) of fnatt.Ultrasonic_sensor;

@@ -10,6 +10,8 @@ project Gnatmobile is
 
    package Ide is
       for Connection_Tool use "pyocd";
+      for Program_Host use "::1234";
+      for Communication_Protocol use "remote";
    end Ide;
 
    package Binder is
