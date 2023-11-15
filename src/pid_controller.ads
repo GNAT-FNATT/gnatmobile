@@ -5,11 +5,14 @@ with Ada.Real_Time; use Ada.Real_Time;
 package pid_controller is
 
    -- varmesokker todo
-   procedure PIDi (Target_Distance : Distance_cm; Actual_Distance : Distance_cm; Last_Time : Time);
+   procedure PIDi (Target_Distance : Distance_cm; Actual_Distance : Distance_cm);
 
-   function GetPIDResult return Integer;
+   procedure Flush;
+
+   function GetPIDResult return Float;
 
 private
-   PIDResult : Integer := 0;
+   PIDResult : Float := 0.0;
+
 
 end pid_controller;
