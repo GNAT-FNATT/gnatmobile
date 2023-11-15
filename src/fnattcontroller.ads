@@ -19,10 +19,13 @@ package FnattController is
    protected FnattControl is
       function GetPanicMode return Boolean;
       function GetDirectionChoice return Directions;
-
       function GetSpeed return Speeds;
       function GetSpeeds return Speeds;
       function GetIteration return UInt12;
+      function GetFrontSensorDistance return DistanceCentimeter;
+      function GetRightSensorDistance return DistanceCentimeter;
+      function GetLeftSensorDistance return DistanceCentimeter;
+      function GetDistance (Direction: DistanceDirections) return DistanceCentimeter;
       
       procedure SetPanicMode (P : Boolean);
       -- procedure SetDirectionChoice (V : Directions);
@@ -32,12 +35,7 @@ package FnattController is
       procedure SetSpeed (S : UInt12);
       procedure SetSpeeds (S: Speeds);
       procedure SetIteration (I: UInt12);
-      function GetFrontSensorDistance return DistanceCentimeter;
-      function GetRightSensorDistance return DistanceCentimeter;
-      function GetLeftSensorDistance return DistanceCentimeter;
-      function GetDistance(Direction: DistanceDirections) return DistanceCentimeter;
-      
-      procedure SetDistance(Direction: DistanceDirections; Distance: DistanceCentimeter);
+      procedure SetDistance (Direction: DistanceDirections; Distance: DistanceCentimeter);
       procedure SetDirectionChoice (V : Directions);
       procedure SetFrontSensorDistance (D : DistanceCentimeter);
       procedure SetRightSensorDistance (D : DistanceCentimeter);

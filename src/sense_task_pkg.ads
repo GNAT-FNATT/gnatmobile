@@ -10,6 +10,7 @@ with MicroBit.Console;
 use MicroBit;
 with nRF.Device; use nRF.Device;
 with HAL;
+with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 
 
 package Sense_Task_Pkg is

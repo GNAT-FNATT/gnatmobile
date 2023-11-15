@@ -1,15 +1,16 @@
-with MicroBit.Types;
-use MicroBit.Types;
+with MicroBit.Types; use MicroBit.Types;
 with Ada.Real_Time; use Ada.Real_Time;
+with Fnatt_Distance; use Fnatt_Distance;
+with HAL; use HAL;
 
 package pid_controller is
 
    -- varmesokker todo
-   procedure PIDi (Target_Distance : Distance_cm; Actual_Distance : Distance_cm);
+   procedure PIDi (Target_Distance : DistanceCentimeter; Actual_Distance : DistanceCentimeter);
 
    procedure Flush;
 
-   function GetPIDResult return Float;
+   function GetPIDResult return UInt12;
 
 private
    PIDResult : Float := 0.0;

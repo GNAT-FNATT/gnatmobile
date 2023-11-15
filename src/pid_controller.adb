@@ -25,17 +25,17 @@ package body pid_controller is
 
 
 
-   procedure PIDi (Target_Distance : in Distance_cm; Actual_Distance : in Distance_cm) is
+   procedure PIDi (Target_Distance : in DistanceCentimeter; Actual_Distance : in DistanceCentimeter) is
 
 
       -- The target distance we want to achieve
-      TargetDistance : Distance_cm;
+      TargetDistance : DistanceCentimeter;
 
       -- Current Distance
-      CurrentDistance : Distance_cm;
+      CurrentDistance : DistanceCentimeter;
 
       -- The error between actual distance and target
-      ErrorDistance : Distance_cm := 0;
+      ErrorDistance : DistanceCentimeter := 0;
       temp_ErrorDistance : Float;
 
       -- The coefficients
@@ -49,7 +49,7 @@ package body pid_controller is
 
       dt : Duration;
       temp_dt : float;
-      NowTime : Time ;
+      NowTime : Time;
 
       -- The output from the PID Controller
       PIDOut : Float := 0.0;
@@ -122,16 +122,16 @@ package body pid_controller is
          PIDResult := 500.0;
       else
          PIDResult := 4095.0 - PIDOut;
-
       end if;
-       Put_Line("PIDResult " & PIDResult'Image);
+
+      Put_Line("PIDResult " & PIDResult'Image);
       Put_Line("End PID");
       LastPIDTime := Clock;
      end PIDi;
 
-   function GetPIDResult return Float is
+   function GetPIDResult return UInt12 is
    begin
-      return PIDResult;
+      return UInt12(PIDResult);
    end GetPIDResult;
 
 

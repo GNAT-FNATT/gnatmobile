@@ -2,6 +2,7 @@ with Ada.Real_Time; use Ada.Real_Time;
 with Fnatt_Distance; use Fnatt_Distance;
 with HAL; use HAL;
 
+
 package body Think_Task_Pkg is
    task body think is
       myClock: Time;
@@ -10,9 +11,12 @@ package body Think_Task_Pkg is
       leftDistance: DistanceCentimeter;
       chosenDirection: Directions;
       chosenSpeed: Speeds;
-      -- previousDirection: Directions;
       
+      -- turn on pid if within
       distanceThreshold: DistanceCentimeter := 30;
+      -- pid goal, if further from this 
+      -- turn pid off
+      distanceGoal: DistanceCentimeter := 30;
       
       shouldThink: Boolean := True;
       isCloseFront: Boolean := False;
@@ -39,7 +43,6 @@ package body Think_Task_Pkg is
             shouldThink := False;
          end if;
 
-         -- previousDirection := FnattControl.GetDirectionChoice;
          isCloseFront := False;
          isCloseRight := False;
          isCloseLeft := False;
@@ -48,34 +51,36 @@ package body Think_Task_Pkg is
          rightDistance := FnattControl.GetRightSensorDistance;
          leftDistance := FnattControl.GetLeftSensorDistance;
          
-         if frontDistance /= 0 and frontDistance <= distanceThreshold then
+         if frontDistance < distanceThreshold then
             isCloseFront := True;
          end if;
          
-         if rightDistance /= 0 and rightDistance <= distanceThreshold then
+         if rightDistance < distanceThreshold then
             isCloseRight := True;
          end if;
          
-         if leftDistance /= 0 and leftDistance <= distanceThreshold then
+         if leftDistance < distanceThreshold then
             isCloseLeft := True;
          end if;
          
-         -- directions which are tested and correct:
-         -- backward
-         -- forward
-         -- rotating left
-         -- forward right
-         -- forward left
-         -- backward right
-         -- backward left
-
-         chosenSpeed := (4095, 4095, 4095, 4095);
-         -- reset speed back to normal
-         FnattControl.SetSpeeds(chosenSpeed);
          
-         -- dont do all this if not shouldthink
+         -- set speeds
          if not shouldThink then
             Put_Line("In panic mode!");
+         elsif isCloseFront or isCloseRight or isCloseLeft then
+            -- take the smallest distance and pid to goal
+            PIDi(DistanceCentimeter'Min(DistanceCentimeter'Min(frontDistance,rightDistance),leftDistance), distanceGoal);
+            FnattControl.SetSpeed(GetPIDResult);
+         else 
+            -- not close to anything -> flush
+            chosenSpeed := (4095, 4095, 4095, 4095);
+            -- reset speed back to normal
+            FnattControl.SetSpeeds(chosenSpeed);
+         end if;
+         
+         -- set direction
+         if not shouldThink then
+            null;
          else
             if isCloseFront then
                if isCloseRight and isCloseLeft then
@@ -115,19 +120,18 @@ package body Think_Task_Pkg is
                      chosenSpeed := (950, 950, 4095, 4095);
                   end if;
                   
+                  -- overwrite speeds for turning
+                  FnattControl.SetSpeeds(chosenSpeed);
                   currentIteration := currentIteration + 1;
                   FnattControl.SetIteration(currentIteration);
                     
                   decision := 8;
                end if;
+               
+               FnattControl.SetDirectionChoice(chosenDirection);
+               Put_Line("Descision " & decision'Image);
             end if;
-         
-            -- chosenDirection := Backward_Right;
-         
-            FnattControl.SetDirectionChoice(chosenDirection);
-            FnattControl.SetSpeeds(chosenSpeed);
-            Put_Line("Descision " & decision'Image);
-
+            
          end if;
          
          delay until myClock + waitTime;
