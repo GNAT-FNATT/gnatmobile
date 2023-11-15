@@ -42,6 +42,11 @@ package body FnattController is
          Iteration := I;
       end SetIteration;
       
+      procedure SetPanicMode (P : Boolean) is 
+      begin
+         HasPanic := P;
+      end SetPanicMode;
+      
       
       --  functions cannot modify the data
       function GetDirectionChoice return Directions is
@@ -78,6 +83,11 @@ package body FnattController is
       begin
          return Iteration;
       end GetIteration;
+      
+      function GetPanicMode return Boolean is 
+      begin
+         return HasPanic;
+      end GetPanicMode;
       
    end FnattControl;
    

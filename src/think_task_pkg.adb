@@ -1,5 +1,5 @@
 with Ada.Real_Time; use Ada.Real_Time;
-
+with HAL; use HAL;
 
 
 package body Think_Task_Pkg is
