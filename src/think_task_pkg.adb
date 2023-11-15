@@ -1,18 +1,18 @@
 with Ada.Real_Time; use Ada.Real_Time;
+with Fnatt_Distance; use Fnatt_Distance;
 with HAL; use HAL;
-
 
 package body Think_Task_Pkg is
    task body think is
       myClock: Time;
-      frontDistance: Distance_cm;
-      rightDistance: Distance_cm;
-      leftDistance: Distance_cm;
+      frontDistance: DistanceCentimeter;
+      rightDistance: DistanceCentimeter;
+      leftDistance: DistanceCentimeter;
       chosenDirection: Directions;
       chosenSpeed: Speeds;
       -- previousDirection: Directions;
       
-      distanceThreshold: Distance_cm := 30;
+      distanceThreshold: DistanceCentimeter := 30;
       
       shouldThink: Boolean := True;
       isCloseFront: Boolean := False;

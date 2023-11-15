@@ -1,106 +1,65 @@
 package body Sense_Task_Pkg is
-
+   
    task body sense is
-      myClock: Time;
+      leftMeasurement: Measurement :=(Distance=> MaximumDistance,
+                                      Threshold => ThresholdValue,
+                                      WithinThreshold => False,
+                                      Direction =>FnattController.Left);
+      frontMeasurement: Measurement :=(Distance=> MaximumDistance,
+                                       Threshold => ThresholdValue,
+                                       WithinThreshold => False,
+                                       Direction => FnattController.Front);
+      rightMeasurement: Measurement :=(Distance=> MaximumDistance,
+                                       Threshold => ThresholdValue,
+                                       WithinThreshold => False,
+                                       Direction => FnattController.Right);
+      Measurements: MeasurementsArray := (leftMeasurement, frontMeasurement, rightMeasurement);
+      Deadline: Ada.Real_Time.Time;
+      currentState: State;     
+    begin
+      currentState := Init;
+      Microbit.Console.Put_Line("Sense: " & currentState'Image);
       
-      forwardDistance: Distance_cm;
-      rightDistance: Distance_cm;
-      leftDistance: Distance_cm;
-      panicThreshold: Distance_cm := 10;
-      panicDirection: Directions;
-      
-      inPanic: Boolean := False;
-      isReallyClose: Boolean := False;
-      isReallyCloseFront: Boolean := False;
-      isReallyCloseRight: Boolean := False;
-      isReallyCloseLeft: Boolean := False;
-      
-      waitTime: Time_Span := Milliseconds(200);
-   begin
-      loop
-         myClock := Clock;
-         
-         -- do we need to set these?
-         -- inPanic := False;
-         -- isReallyClose := False;
-         -- isReallyCloseFront := False;
-         -- isReallyCloseRight := False;
-         -- isReallyCloseLeft := False;
-         
-         forwardDistance := forwardSensor.Read;
-         rightDistance := rightSensor.Read;
-         leftDistance := leftSensor.Read;
-         
-         Put_Line("Sensor read");
-         
-         Put_Line("Forward distance " & forwardDistance'Image);
-         Put_Line("Right distance " & rightDistance'Image);
-         Put_Line("Left distance " & leftDistance'Image);
-         
-         -- if we are really close to something => skip think
-         if forwardDistance /= 0 and rightDistance /= 0 and leftDistance /= 0 then
-            
-            if forwardDistance <= panicThreshold then
-               isReallyCloseFront := True;
-               isReallyClose := True;
-            end if;
-            
-            if rightDistance <= panicThreshold then
-               isReallyCloseRight := True;
-               isReallyClose := True;
-            end if;
-            
-            if leftDistance <= panicThreshold then
-               isReallyCloseLeft := True;
-               isReallyClose := True;
-            end if;
-            
-         end if;
-         
-         
-         if isReallyClose then
-            inPanic := True;
-            
-            -- move opposite direction quickly
-            if isReallyCloseFront then
-               if isReallyCloseRight and not isReallyCloseLeft then
-                  panicDirection := Backward_Left;
-               elsif not isReallyCloseRight and isReallyCloseLeft then
-                  panicDirection := Backward_Right;
-               else
-                  -- close left and right or only close front
-                  panicDirection := Backward;
-               end if;
-            else
-               if isReallyCloseRight and not isReallyCloseLeft then
-                  panicDirection := Forward_Left;
-               elsif not isReallyCloseRight and isReallyCloseLeft then
-                  panicDirection := Forward_Right;
-               else
-                  -- close left and right or only not close front
-                  -- let think decide, no good way for handling this
-                  inPanic := False;
-                  -- panicDirection := Forward;
-               end if;
-            end if;
-         else
-            inPanic := False;
-         end if;
-         
-         -- set direction if in panic mode 
-         if inPanic then
-            FnattControl.SetPanicMode(True);
-            FnattControl.SetDirectionChoice(panicDirection);
-         else
-            FnattControl.SetPanicMode(False);
-         end if;
-         
-         FnattControl.SetFrontSensorDistance(forwardDistance);
-         FnattControl.SetRightSensorDistance(rightDistance);
-         FnattControl.SetLeftSensorDistance(leftDistance);
-         
-         delay until myClock + waitTime;
-      end loop;
-   end sense;
+      leftSensor.SetMaximumDistance(MaximumDistance);
+      frontSensor.SetMaximumDistance(MaximumDistance);
+      rightSensor.SetMaximumDistance(MaximumDistance);
 
+      currentState:= Normal;
+      loop
+         Deadline:= Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(1000);
+         
+         Microbit.Console.Put_Line("P025: " & nRF.Device.P25.Set'Image);
+
+         leftMeasurement.Distance := leftSensor.Read;
+         frontMeasurement.Distance := frontSensor.Read;
+         rightMeasurement.Distance := rightSensor.Read;
+
+         for index in Measurements'Range loop
+            FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
+            Measurements(index).WithinThreshold := (if Measurements(index).Distance <= Measurements(index).Threshold then True else False);
+         end loop;
+         
+         
+         
+         --  if frontMeasurement.WithinThreshold  then
+         --     if leftMeasurement.WithinThreshold and rightMeasurement.Threshold then
+         --        FnattControl.ChoiceDirection(Backward);
+         --     elsif leftMeasurement.WithinThreshold and not rightMeasurement.Threshold then
+         --        FnattControl.ChoiceDirection(Backward_Right);
+         --     else
+         --        FnattControl.SetDirectionChoice(Backward_Left);
+         --     end if;
+         --  else
+         --     if leftMeasurement.WithinThreshold and rightMeasurement.Threshold then
+         --        FnattControl.ChoiceDirection(Forward);
+         --     elsif leftMeasurement.WithinThreshold and not rightMeasurement.Threshold then
+         --        FnattControl.ChoiceDirection(Forward_Right);
+         --     else
+         --        FnattControl.ChoiceDirection(Forward_Left);
+         --     end if;
+         --  end if;
+           
+         delay until Deadline;
+      end loop;
+         end sense;
 end Sense_Task_Pkg;
