@@ -14,7 +14,7 @@ package FnattController is
                                  -- what happens if think has a higher priority? Why is think' set direction overwritten by sense' set direction?
    
    --task Act with Priority=> 3;
-   type DistanceDirections is (Left, Front, Right);
+   type DistanceDirections is (LeftSensor, FrontSensor, RightSensor);
   
    protected FnattControl is
       function GetPanicMode return Boolean;

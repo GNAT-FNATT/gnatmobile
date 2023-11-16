@@ -15,9 +15,9 @@ with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 
 package Sense_Task_Pkg is
 
-   package frontSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P0, MicroBit.MB_P1);
-   package rightSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P8, MicroBit.MB_P2);
-   package leftSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P13, MicroBit.MB_P12);
+   package frontUltrasonicSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P0, MicroBit.MB_P1);
+   package rightUltrasonicSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P8, MicroBit.MB_P2);
+   package leftUltrasonicSensor is new Fnatt_Ultrasonic_Sensor(MicroBit.MB_P13, MicroBit.MB_P12);
    --  package detection is new fnatt.crash_detection(fnatt.crash.X);
    MaximumDistance: constant DistanceCentimeter:=50;
    ThresholdValue: constant DistanceCentimeter:= 5;
@@ -30,7 +30,8 @@ package Sense_Task_Pkg is
       Threshold: DistanceCentimeter;
       WithinThreshold: Boolean;
    end record;
-   type MeasurementsArray is array(Natural range <>) of Measurement;
+   type MeasurementAccess is access all Measurement;
+   type MeasurementsArray is array(DistanceDirections) of Measurement;
    type ByteArray is array(0 ..7) of HAL.Bit
      with Component_Size => 1, Size => 8;
 

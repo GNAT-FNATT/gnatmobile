@@ -34,13 +34,13 @@ package body Fnatt_Ultrasonic_Sensor is
    begin
        FallingEdgeDeadline:= Microseconds(Integer(Distance)*10**6 /ConversionFactor);
    end SetMaximumDistance;
-   procedure SetAmountOfMeasurements(amount: Natural) is
-   begin
-      AmountOfMeasurements:= amount;
-   end SetAmountOfMeasurements;
+   --  procedure SetAmountOfMeasurements(amount: MeasurementArrayRange) is
+   --  begin
+   --     AmountOfMeasurements:= amount;
+   --  end SetAmountOfMeasurements;
      
    function Read return DistanceCentimeter is
-      Measurements: DistanceArray(0..AmountOfMeasurements);
+      Measurements: DistanceArray(0..2);
    begin
       
       for i in Measurements'Range loop
@@ -48,7 +48,7 @@ package body Fnatt_Ultrasonic_Sensor is
       end loop;
       --Put_Line("Measurements: " & Measurements'Image);
       Sort(Measurements);
-      --Put_Line("Measurements: " & Measurements'Image);
+      --  Put_Line("Measurements: " & Measurements'Image);
       return Measurements(Measurements'Length/2);
    end Read;
    

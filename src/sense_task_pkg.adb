@@ -1,81 +1,63 @@
 package body Sense_Task_Pkg is
    
    task body sense is
-      leftMeasurement: Measurement := (Distance=> MaximumDistance,
+      leftMeasurement: Measurement :=(Distance=> MaximumDistance,
+                                      Threshold => ThresholdValue,
+                                      WithinThreshold => False,
+                                      Direction =>FnattController.LeftSensor);
+      frontMeasurement: Measurement :=(Distance=> MaximumDistance,
                                        Threshold => ThresholdValue,
                                        WithinThreshold => False,
-                                       Direction =>FnattController.Left);
-      frontMeasurement: Measurement := (Distance=> MaximumDistance,
-                                        Threshold => ThresholdValue,
-                                        WithinThreshold => False,
-                                        Direction => FnattController.Front);
-      rightMeasurement: Measurement := (Distance=> MaximumDistance,
-                                        Threshold => ThresholdValue,
-                                        WithinThreshold => False,
-                                        Direction => FnattController.Right);
+                                      Direction => FnattController.FrontSensor);
+      rightMeasurement: Measurement :=(Distance=> MaximumDistance,
+                                       Threshold => ThresholdValue,
+                                       WithinThreshold => False,
+                                       Direction => FnattController.RightSensor);
       Measurements: MeasurementsArray := (leftMeasurement, frontMeasurement, rightMeasurement);
       Deadline: Ada.Real_Time.Time;
-      currentState: State;
-      inPanic: Boolean;
-      panicDirection: Directions; 
+      currentState: State;     
     begin
       currentState := Init;
-      inPanic := False;
-      
       Microbit.Console.Put_Line("Sense: " & currentState'Image);
       
-      leftSensor.SetMaximumDistance(MaximumDistance);
-      frontSensor.SetMaximumDistance(MaximumDistance);
-      rightSensor.SetMaximumDistance(MaximumDistance);
+      leftUltrasonicSensor.SetMaximumDistance(MaximumDistance);
+      frontUltrasonicSensor.SetMaximumDistance(MaximumDistance);
+      rightUltrasonicSensor.SetMaximumDistance(MaximumDistance);
 
       currentState:= Normal;
       loop
-         Deadline := Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(1000);
+         Deadline:= Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(50);
          
-         Microbit.Console.Put_Line("P025: " & nRF.Device.P25.Set'Image);
-
-         leftMeasurement.Distance := leftSensor.Read;
-         frontMeasurement.Distance := frontSensor.Read;
-         rightMeasurement.Distance := rightSensor.Read;
-
          for index in Measurements'Range loop
-            FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
+            case Measurements(index).Direction is 
+              when LeftSensor => Measurements(index).Distance:= leftUltrasonicSensor.ReadRaw;
+              when frontSensor => Measurements(index).Distance:= frontUltrasonicSensor.ReadRaw;
+              when RightSensor => Measurements(index).Distance:= rightUltrasonicSensor.ReadRaw;
+            end case;
+              MicroBit.Console.Put_Line(Measurements(index).Direction'Image & ": " & Measurements(index).Distance'Image);
+             -- FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
             Measurements(index).WithinThreshold := (if Measurements(index).Distance <= Measurements(index).Threshold then True else False);
          end loop;
          
-         if frontMeasurement.WithinThreshold or rightMeasurement.WithinThreshold or leftMeasurement.WithinThreshold then
-            inPanic := True;
-         end if;
-         
-         if inPanic then
-            if frontMeasurement.WithinThreshold  then
-               if rightMeasurement.WithinThreshold and not leftMeasurement.WithinThreshold then
-                  panicDirection := Backward_Left;
-               elsif not rightMeasurement.WithinThreshold and leftMeasurement.WithinThreshold then
-                  panicDirection := Backward_Right;
-               else
-                  -- close left and right or only close front
-                  panicDirection := Backward;
-               end if;
+        
+         if Measurements(FrontSensor).WithinThreshold  then
+            if Measurements(LeftSensor).WithinThreshold and Measurements(RightSensor).WithinThreshold then
+               FnattControl.SetDirectionChoice(Backward);
+            elsif Measurements(LeftSensor).WithinThreshold and  not Measurements(RightSensor).WithinThreshold then
+               FnattControl.SetDirectionChoice(Backward_Right);
             else
-               if rightMeasurement.WithinThreshold and not leftMeasurement.WithinThreshold then
-                  panicDirection := Forward_Left;
-               elsif not rightMeasurement.WithinThreshold and leftMeasurement.WithinThreshold then
-                  panicDirection := Forward_Left;
-               else
-                  -- close left and right or only not close front
-                  -- let think decide, no good way for handling this
-                  inPanic := False;
-               end if;
+               FnattControl.SetDirectionChoice(Backward_Left);
+            end if;
+         else
+            if Measurements(LeftSensor).WithinThreshold and Measurements(RightSensor).WithinThreshold then
+               FnattControl.SetDirectionChoice(Forward);
+            elsif Measurements(LeftSensor).WithinThreshold and  not Measurements(RightSensor).WithinThreshold then
+               FnattControl.SetDirectionChoice(Forward_Right);
+            else
+               FnattControl.SetDirectionChoice(Forward_Left);
             end if;
          end if;
-         
-         FnattControl.SetPanicMode(inPanic);
-         
-         if inPanic then
-            FnattControl.SetDirectionChoice(panicDirection);
-         end if;
-         
+           
          delay until Deadline;
       end loop;
          end sense;

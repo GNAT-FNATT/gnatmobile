@@ -51,11 +51,11 @@ package body FnattController is
       procedure SetDistance(Direction: DistanceDirections; Distance: DistanceCentimeter) is
       begin
          case Direction is
-         when Front=>
+         when FrontSensor=>
             FrontSensorDistance:= Distance;
-         when Left=>
+         when LeftSensor=>
             LeftSensorDistance:= Distance;
-         when Right=>
+         when RightSensor=>
             RightSensorDIstance := Distance;
          end case;
       end SetDistance;
@@ -105,9 +105,9 @@ package body FnattController is
       function GetDistance(Direction: DistanceDirections) return DistanceCentimeter is
       begin
          case Direction is
-            when Front => return FrontSensorDistance;
-            when Left => return LeftSensorDistance;
-            when Right => return RightSensorDistance;
+            when FrontSensor => return FrontSensorDistance;
+            when LeftSensor => return LeftSensorDistance;
+            when RightSensor => return RightSensorDistance;
          end case;
       end GetDistance;
         
