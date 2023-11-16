@@ -30,12 +30,14 @@ package body Sense_Task_Pkg is
          
          --Microbit.Console.Put_Line("P025: " & nRF.Device.P25.Set'Image);
 
-         leftMeasurement.Distance := leftSensor.Read;
-         frontMeasurement.Distance := frontSensor.Read;
-         rightMeasurement.Distance := rightSensor.Read;
-
          for index in Measurements'Range loop
-            FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
+            case Measurements(index).Direction is 
+              when Left => Measurements(index).Distance:= leftSensor.Read;
+              when Front => Measurements(index).Distance:= frontSensor.Read;
+              when Right => Measurements(index).Distance:= rightSensor.Read;
+            end case;
+              MicroBit.Console.Put_Line(Measurements(index).Direction'Image & ": " & Measurements(index).Distance'Image);
+              FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
             Measurements(index).WithinThreshold := (if Measurements(index).Distance <= Measurements(index).Threshold then True else False);
          end loop;
          
