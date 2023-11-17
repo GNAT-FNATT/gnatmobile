@@ -5,87 +5,73 @@ with MicroBit.Console; use MicroBit.Console;
 with Ada.Unchecked_Conversion;
 
 package body pid_controller is
-   subtype LLI is Long_Long_Integer;
 
-      function To_LLI is
-     new Ada.Unchecked_Conversion (Time_Span, LLI);
-      function To_Integer is
-     new Ada.Unchecked_Conversion (LLI, Integer);
+   --subtype LLI is Long_Long_Integer;
+
+   --function To_LLI is
+     --new Ada.Unchecked_Conversion (Time_Span, LLI);
+
+   --function To_Integer is
+     --new Ada.Unchecked_Conversion (LLI, Integer);
+
    -- varmesokker todo
-   procedure PIDi (Target_Distance : in Distance_cm; Actual_Distance : in Distance_cm; Last_Time : in Time) is
+   LastPIDTime : Time := Clock;
+
+   -- The integral component has to be declared here so that it doesnt reset each cycle
+   Integral : Float := 0.0;
+
+   -- Previous error has to be declared here so that it doesnt reset each cycle
+   PreviousError : Float := 0.0;
 
 
 
+   procedure PIDi (Target_Distance : in DistanceCentimeter; Actual_Distance : in DistanceCentimeter) is
 
-      -- subtype Distance is new Natural in range 0..400;
 
       -- The target distance we want to achieve
-      TargetDistance : Distance_cm;
+      TargetDistance : DistanceCentimeter;
 
       -- Current Distance
-      CurrentDistance : Distance_cm;
+      CurrentDistance : DistanceCentimeter;
 
       -- The error between actual distance and target
-      ErrorDistance : Distance_cm := 0;
+      ErrorDistance : DistanceCentimeter := 0;
+      temp_ErrorDistance : Float;
 
+      -- The coefficients
+      Kp : Float := 10.0;
+      Ki : Float := 10.0;
 
-      -- The coefficient
-
-      Kp : Integer := 5000000;
-
-      Ki : Integer := 3;
-
-      -- Kd : Integer := 2;
-
-
-      -- The proportional component
-
-      Proportional : Integer := 0;
-
-
-      -- The integral component
-
-      Integral : Integer := 0;
-
-
-      -- The derivative component
-
-      -- Derivative : Integer := 0;
-
-      -- Previous error
-      PreviousError : Integer := 0;
+        -- The proportional component
+      Proportional : Float := 0.0;
 
       -- Time scope of PID cycles
 
-      dt : Time_Span ;
-
-      NowTime : Time ;
-
-      -- The variable to change
-      -- PIDVariable : Speeds;
+      dt : Duration;
+      temp_dt : float;
+      NowTime : Time;
 
       -- The output from the PID Controller
-      PIDOut : Integer := 0;
+      PIDOut : Float := 0.0;
 
-      --Converted_dt : UInt12;
-      temp_dt : LLI;
-      new_dt : Integer;
 
    begin
-      Put_Line("Start PID");
+      --Put_Line("Start PID");
 
       delay 0.1;
       NowTime := Clock;
 
-      dt := NowTime - Last_Time;
+      dt := To_Duration(NowTime - LastPIDTime);
 
-      Put_Line("Duration:" & To_Duration(dt)'Image);
+      --Put_Line("dt: " & dt'Image);
+      --Put_Line("dt float" & Float(dt)'Image);
+      --Put_Line("NowTime: " & NowTime'Image);
+      --Put_Line("Last PID Time: " & LastPIDTime'Image);
 
-      temp_dt := To_LLI(dt);
-      Put_Line("LLI convert:" & temp_dt'Image);
+      --Put_Line("Duration:" & To_Duration(dt)'Image);
 
-      new_dt := To_Integer(temp_dt);
-      Put_Line("Int convert:" & new_dt'Image);
+
+      --Put_Line("Int convert:" & new_dt'Image);
 
       TargetDistance := Target_Distance;
       CurrentDistance := Actual_Distance;
@@ -93,10 +79,21 @@ package body pid_controller is
       ErrorDistance := TargetDistance - CurrentDistance;
       Put_Line ("ErrorDistance: " & ErrorDistance'Image);
 
-      Proportional := Kp*Integer(ErrorDistance);
+      Proportional := Kp*Float(Integer(ErrorDistance));
       Put_Line ("Proportional:" & Proportional'Image);
 
-      Integral := Integral + Ki*new_dt;
+      --Put_Line("Error distance float" & Float(ErrorDistance)'Image);
+      --Put_Line("Ki" & Ki'Image);
+
+
+
+      temp_ErrorDistance := Float(ErrorDistance);
+      --Put_Line("Temp Error Distance" & temp_ErrorDistance'Image);
+
+      temp_dt := Float(dt);
+     -- Put_Line("Temp dt" & temp_dt'Image);
+
+      Integral := Integral + Float(ErrorDistance)*Ki*Float(dt);
       Put_Line("Integral: " & Integral'Image);
 
       PIDOut := Proportional + Integral;
@@ -105,12 +102,46 @@ package body pid_controller is
       PreviousError := PIDOut;
       -- Last_Time := NowTime;
 
-      PIDResult := PIDOut;
+      --PIDResult := PIDOut;
+
+
+
+
+
+
+     -- if PIDOut >= 4095.0 then
+       --  PIDResult := 4095.0;
+
+      --elsif PIDOut <= 500.0 then
+        -- PIDResult := 500.0;
+      --else
+       --  PIDResult := PIDOut;
+       -- end if ;
+
+      if PIDOut >= (4095.0 - 500.0) then
+         PIDResult := 500.0;
+      else
+         PIDResult := 4095.0 - PIDOut;
+      end if;
+
+      Put_Line("PIDResult " & PIDResult'Image);
+      Put_Line("End PID");
+      LastPIDTime := Clock;
      end PIDi;
 
-   function GetPIDResult return Integer is
+   function GetPIDResult return UInt12 is
    begin
-      return PIDResult;
+      return UInt12(PIDResult);
    end GetPIDResult;
+
+
+   procedure Flush is
+   begin
+      Integral := 0.0;
+      PreviousError := 0.0;
+      PIDResult := 0.0;
+   end Flush;
+
+
 
 end pid_controller;

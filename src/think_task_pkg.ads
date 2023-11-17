@@ -4,6 +4,7 @@ with MicroBit.Types; use MicroBit.Types;
 with MicroBit.IOsForTasking; use MicroBit.IOsForTasking;
 with MicroBit.MotorDriver; use MicroBit.MotorDriver;
 with MicroBit.Console; use MicroBit.Console;
+with pid_controller; use pid_controller;
 
 package Think_Task_Pkg is
 
