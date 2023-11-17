@@ -24,7 +24,7 @@ package Fnatt_Ultrasonic_Sensor is
 private
    
   
-   ConversionFactor: constant Integer := 100*400/2;
+   ConversionFactor: constant Integer := 100*343/2;--Should be calibrated with temperature.
  
    type DistanceArray is array(Natural range <>) of DistanceCentimeter;
    type Edge is (Falling, Rising);
