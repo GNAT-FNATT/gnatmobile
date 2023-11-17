@@ -61,5 +61,5 @@ package Sense_Task_Pkg is
    --     end case;
    --  end record
    --  with Unchecked_Union;
-   task sense with Priority => 1;
+   task sense with Priority => 2;
 end Sense_Task_Pkg;

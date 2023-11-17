@@ -32,7 +32,7 @@ package body Think_Task_Pkg is
       
       decision: Natural;
       currentIteration: UInt12 := 0;
-      waitTime: Time_Span := Milliseconds(51);
+      waitTime: Time_Span := Milliseconds(60);
    begin
       loop
          myClock := Clock;

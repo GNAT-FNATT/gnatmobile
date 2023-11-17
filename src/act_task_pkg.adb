@@ -8,7 +8,7 @@ package body Act_Task_Pkg is
       -- timeTaken: Time_Span;
       driveDirection: Directions;
       speed: Speeds;
-      waitTime: Time_Span := Milliseconds(51);
+      waitTime: Time_Span := Milliseconds(60);
    begin
       loop
          myClock := Clock;
