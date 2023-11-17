@@ -30,7 +30,7 @@ package body FnattController is
       
       procedure SetSpeed (S : UInt12) is 
       begin
-         Speed := S;
+         CustomSpeeds := (S, S, S, S);
       end SetSpeed;
       
       procedure SetSpeeds (S : Speeds) is 
@@ -81,12 +81,7 @@ package body FnattController is
       begin
          return LeftSensorDistance;
       end GetLeftSensorDistance;
-      
-      function GetSpeed return Speeds is 
-      begin
-         return (Speed,Speed,Speed,Speed);
-      end GetSpeed;
-      
+     
       function GetSpeeds return Speeds is
       begin
          return CustomSpeeds;

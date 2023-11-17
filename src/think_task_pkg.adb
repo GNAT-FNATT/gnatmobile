@@ -11,6 +11,7 @@ package body Think_Task_Pkg is
       leftDistance: DistanceCentimeter;
       chosenDirection: Directions;
       chosenSpeed: Speeds;
+      -- timeTaken: Time_Span;
       
       -- turn on pid if within
       distanceThreshold: DistanceCentimeter := 30;
@@ -31,7 +32,7 @@ package body Think_Task_Pkg is
       
       decision: Natural;
       currentIteration: UInt12 := 0;
-      waitTime: Time_Span := Milliseconds(300);
+      waitTime: Time_Span := Milliseconds(51);
    begin
       loop
          myClock := Clock;
@@ -63,15 +64,19 @@ package body Think_Task_Pkg is
             isCloseLeft := True;
          end if;
          
-         
          -- set speeds
          if not shouldThink then
-            Put_Line("In panic mode!");
+            -- Put_Line("In panic mode!");
+            null;
          elsif isCloseFront or isCloseRight or isCloseLeft then
             -- take the smallest distance and pid to goal
+            --Put_Line("Doing PID");
             PIDi(DistanceCentimeter'Min(DistanceCentimeter'Min(frontDistance,rightDistance),leftDistance), distanceGoal);
+            --Put_Line("PID result" & GetPIDResult'Image);
             FnattControl.SetSpeed(GetPIDResult);
          else 
+            --Put_Line("Flushing and setting speeds");
+            Flush;
             -- not close to anything -> flush
             chosenSpeed := (4095, 4095, 4095, 4095);
             -- reset speed back to normal
@@ -80,6 +85,7 @@ package body Think_Task_Pkg is
          
          -- set direction
          if not shouldThink then
+            --Put_Line("Should not think!");
             null;
          else
             if isCloseFront then
@@ -94,7 +100,7 @@ package body Think_Task_Pkg is
                   decision := 3;
                else
                   -- not iscloseright and not iscloseleft
-                  chosenDirection := Rotating_Left;
+                  chosenDirection := Rotating_Left; -- ikke testa
                   decision := 4;
                end if;
             else
@@ -129,10 +135,14 @@ package body Think_Task_Pkg is
                end if;
                
                FnattControl.SetDirectionChoice(chosenDirection);
-               Put_Line("Descision " & decision'Image);
+               --Put_Line("Descision " & decision'Image);
             end if;
             
          end if;
+         
+         -- timeTaken := Clock-myClock;
+         
+         -- Put_Line(To_Duration(timeTaken)'Image);
          
          delay until myClock + waitTime;
       end loop;

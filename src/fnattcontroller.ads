@@ -19,7 +19,6 @@ package FnattController is
    protected FnattControl is
       function GetPanicMode return Boolean;
       function GetDirectionChoice return Directions;
-      function GetSpeed return Speeds;
       function GetSpeeds return Speeds;
       function GetIteration return UInt12;
       function GetFrontSensorDistance return DistanceCentimeter;
