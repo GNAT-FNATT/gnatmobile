@@ -12,7 +12,7 @@ package body Sense_Task_Pkg is
                                        Threshold => ThresholdValue,
                                        WithinThreshold => False,
                                       Direction => FnattController.FrontSensor);
-      rightMeasurement: Measurement :=(Distance=> MaximumDistance,
+      rightMeasurement: Measurement := (Distance=> MaximumDistance,
                                        Threshold => ThresholdValue,
                                        WithinThreshold => False,
                                        Direction => FnattController.RightSensor);
@@ -32,16 +32,17 @@ package body Sense_Task_Pkg is
       currentState:= Normal;
       loop
          myClock := Clock;
-         Deadline:= Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(50);
+         Deadline:= Ada.Real_Time.Clock + Ada.Real_Time.Milliseconds(200);
          
          for index in Measurements'Range loop
             case Measurements(index).Direction is 
-              when LeftSensor => Measurements(index).Distance:= leftUltrasonicSensor.ReadRaw;
-              when frontSensor => Measurements(index).Distance:= frontUltrasonicSensor.ReadRaw;
-              when RightSensor => Measurements(index).Distance:= rightUltrasonicSensor.ReadRaw;
+               when LeftSensor => Measurements(index).Distance := leftUltrasonicSensor.ReadRaw;
+               when frontSensor => Measurements(index).Distance := frontUltrasonicSensor.ReadRaw;
+               when RightSensor => Measurements(index).Distance := rightUltrasonicSensor.ReadRaw;
             end case;
-              -- MicroBit.Console.Put_Line(Measurements(index).Direction'Image & ": " & Measurements(index).Distance'Image);
-             -- FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
+            
+            MicroBit.Console.Put_Line(Measurements(index).Direction'Image & ": " & Measurements(index).Distance'Image);
+            FnattControl.SetDistance(Measurements(index).Direction, Measurements(index).Distance);
             Measurements(index).WithinThreshold := (if Measurements(index).Distance <= Measurements(index).Threshold then True else False);
          end loop;
          
@@ -81,7 +82,7 @@ package body Sense_Task_Pkg is
             end if;
          end if;
          
-         timeTaken := Clock-myClock;
+         timeTaken := Clock - myClock;
          
          -- Put_Line(To_Duration(timeTaken)'Image);
            

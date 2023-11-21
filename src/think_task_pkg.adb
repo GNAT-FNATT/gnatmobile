@@ -24,15 +24,15 @@ package body Think_Task_Pkg is
       isCloseRight: Boolean := False;
       isCloseLeft: Boolean := False;
       
-      startUpperCurve: UInt12 := 10; 
-      endUpperCurve: UInt12 := 50;
-      startLowerCurve: UInt12 := 70;
-      endLowerCurve: UInt12 := 110;
-      startMiddle: UInt12 := 120;
+      startUpperCurve: UInt12 := 50; 
+      endUpperCurve: UInt12 := 250;
+      startLowerCurve: UInt12 := 350;
+      endLowerCurve: UInt12 := 550;
+      startMiddle: UInt12 := 600;
       
       decision: Natural;
       currentIteration: UInt12 := 0;
-      waitTime: Time_Span := Milliseconds(60);
+      waitTime: Time_Span := Milliseconds(200);
    begin
       loop
          myClock := Clock;
@@ -66,16 +66,16 @@ package body Think_Task_Pkg is
          
          -- set speeds
          if not shouldThink then
-            -- Put_Line("In panic mode!");
+            Put_Line("In panic mode!");
             null;
          elsif isCloseFront or isCloseRight or isCloseLeft then
             -- take the smallest distance and pid to goal
-            --Put_Line("Doing PID");
+            Put_Line("Doing PID");
             PIDi(DistanceCentimeter'Min(DistanceCentimeter'Min(frontDistance,rightDistance),leftDistance), distanceGoal);
-            --Put_Line("PID result" & GetPIDResult'Image);
+            Put_Line("PID result" & GetPIDResult'Image);
             FnattControl.SetSpeed(GetPIDResult);
          else 
-            --Put_Line("Flushing and setting speeds");
+            Put_Line("Flushing and setting speeds");
             Flush;
             -- not close to anything -> flush
             chosenSpeed := (4095, 4095, 4095, 4095);
@@ -132,11 +132,11 @@ package body Think_Task_Pkg is
                   FnattControl.SetIteration(currentIteration);
                     
                   decision := 8;
-               end if;
-               
-               FnattControl.SetDirectionChoice(chosenDirection);
-               --Put_Line("Descision " & decision'Image);
+               end if;   
             end if;
+            
+            FnattControl.SetDirectionChoice(chosenDirection);
+            Put_Line("Descision " & decision'Image);
             
          end if;
          

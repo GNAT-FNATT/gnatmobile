@@ -8,7 +8,7 @@ package body Act_Task_Pkg is
       -- timeTaken: Time_Span;
       driveDirection: Directions;
       speed: Speeds;
-      waitTime: Time_Span := Milliseconds(60);
+      waitTime: Time_Span := Milliseconds(200);
    begin
       loop
          myClock := Clock;
@@ -16,12 +16,12 @@ package body Act_Task_Pkg is
          driveDirection := FnattControl.GetDirectionChoice;
          speed := FnattControl.GetSpeeds;
          
-         --Put_Line("Driving direction: " & Directions'Image(driveDirection));
-         --Put_Line("Driving speed: " & speed'Image);
-         
          -- actually drive
 
          MicroBit.MotorDriver.Drive(driveDirection, speed);
+         
+         Put_Line("Driving direction: " & Directions'Image(driveDirection));
+         Put_Line("Driving speed: " & speed'Image);
          
          -- FnattControl.SetSpeeds(Speeds(4095,4095,4095,4095));
          

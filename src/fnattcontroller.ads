@@ -6,14 +6,6 @@ with MicroBit.Console; use MicroBit.Console;
 with Fnatt_Distance; use Fnatt_Distance;
 
 package FnattController is
-   
-   
-   --ask Sense with Priority => 1;
-  
-   --task Think with Priority=> 1; -- what happens for the set direction if think and sense have the same prio and period?
-                                 -- what happens if think has a higher priority? Why is think' set direction overwritten by sense' set direction?
-   
-   --task Act with Priority=> 3;
    type DistanceDirections is (LeftSensor, FrontSensor, RightSensor);
   
    protected FnattControl is
@@ -27,10 +19,6 @@ package FnattController is
       function GetDistance (Direction: DistanceDirections) return DistanceCentimeter;
       
       procedure SetPanicMode (P : Boolean);
-      -- procedure SetDirectionChoice (V : Directions);
-      -- procedure SetFrontSensorDistance (D : Distance_cm);
-      -- procedure SetRightSensorDistance (D : Distance_cm);
-      -- procedure SetLeftSensorDistance (D : Distance_cm);
       procedure SetSpeed (S : UInt12);
       procedure SetSpeeds (S: Speeds);
       procedure SetIteration (I: UInt12);

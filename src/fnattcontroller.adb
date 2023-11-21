@@ -51,12 +51,12 @@ package body FnattController is
       procedure SetDistance(Direction: DistanceDirections; Distance: DistanceCentimeter) is
       begin
          case Direction is
-         when FrontSensor=>
-            FrontSensorDistance:= Distance;
-         when LeftSensor=>
-            LeftSensorDistance:= Distance;
-         when RightSensor=>
-            RightSensorDIstance := Distance;
+         when FrontSensor =>
+            FrontSensorDistance := Distance;
+         when LeftSensor =>
+            LeftSensorDistance := Distance;
+         when RightSensor => 
+            RightSensorDistance := Distance;
          end case;
       end SetDistance;
 
